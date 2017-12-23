@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class TurtleSoup {
 
+	public static final double TOLERANCE = 1e-5;
+	
     /**
      * Draw a square.
      * 
@@ -31,7 +33,7 @@ public class TurtleSoup {
      * @return angle in degrees, where 0 <= angle < 360
      */
     public static double calculateRegularPolygonAngle(int sides) {
-        return 180 * (1 - 2 / sides);
+        return 180 * (1 - (2.0 / sides));
     }
 
     /**
@@ -45,7 +47,7 @@ public class TurtleSoup {
      * @return the integer number of sides
      */
     public static int calculatePolygonSidesFromAngle(double angle) {
-    	return 360 / ((int)angle + 180);
+    	return (int)Math.ceil((2 / (1 - angle / 180)));
     }
 
     /**
@@ -86,7 +88,76 @@ public class TurtleSoup {
      */
     public static double calculateHeadingToPoint(double currentHeading, int currentX, int currentY,
                                                  int targetX, int targetY) {
-        throw new RuntimeException("implement me!");
+    	
+/* **************************OLD CODE (IT WORKS BUT ISN'T GREAT)*********************************************/    	
+    	
+//    	/*
+//    	 * Creates the unit vector coordinates of @param currentHeading. 
+//    	 * Because the heading angle's origin is north (up) instead of east (right) like the unit circle
+//    	 * 	AND the heading angle rotates clockwise as it's magnitude increases, we have to swap the sine
+//    	 * 	and the cosine from their typical affiliation with xCoordinates-->cosine and yCoordinates-->sine.
+//    	 */
+//    	double currentHeadingUnitVectorX = Math.sin(Math.toRadians(currentHeading)),    			
+//				currentHeadingUnitVectorY = Math.cos(Math.toRadians(currentHeading));
+//    	
+//    	/* Uses the equation for finding the angle alpha between two Vectors:
+//    	 * 						 vectorA (dotProduct) vectorB
+//    	 * 			cos(alpha) = ----------------------------
+//    	 * 						 	 |vectorA|  *  |vectorB|
+//    	 * 
+//    	 * The dot product of two 2D vectors:
+//    	 * 			dotProduct = vectorA.xCoord * vectorB.xCoord +
+//    	 * 						 vectorA.yCoord * vectorB.yCoord 
+//    	 */
+//    	
+//    	int deltaX = targetX - currentX,
+//    			deltaY = targetY - currentY;
+//		double dotProduct = (currentHeadingUnitVectorX * deltaX + currentHeadingUnitVectorY * deltaY),
+//    			
+//    			targetHeadingMagnitude = Math.hypot(deltaX , deltaY),
+//    			
+//				angleBetweenTargetAndHeading = Math.toDegrees(Math.acos(
+//						/* The currentHeading Vector is a unit vector (magnitude of 1) */
+//						dotProduct / targetHeadingMagnitude /* * currentHeading vector magnitude */)); 
+//						   	
+//    	
+//    	/* if the target heading is behind (counterclockwise) the current heading, the angle needs to 
+//    	 * be modified. First we need to find the target heading.
+//    	 */		
+//		//Only true value of Target Heading for (+,+) quadrant
+//    	double targetHeading = Math.toDegrees(Math.atan2(deltaX, deltaY));
+//				
+//    	if(deltaX >= 0 && deltaY < 0)
+//    		targetHeading = 90 - targetHeading; /*Only true for (+,-) quadrant*/
+//    	else if(deltaX < 0)
+//    		targetHeading = 270 - targetHeading; /*Only true for (-,+/-) quadrants*/
+//    	
+//    	if(currentHeading - targetHeading < 180 && currentHeading - targetHeading > 0)
+//    		angleBetweenTargetAndHeading = 360 - angleBetweenTargetAndHeading;
+//    	
+//    	/* The trig functions are not completely accurate and produce values near integer values.
+//    	 * The following code checks if the angle is near an integer then rounds them up to their
+//    	 *  actual accurate integer value if true.
+//    	 */    	
+//    	int roundedAngle = (int)Math.round(angleBetweenTargetAndHeading);
+//    	
+//    	if(Math.abs(roundedAngle - angleBetweenTargetAndHeading) <= TOLERANCE)
+//    		return roundedAngle;
+//    	else
+//    		return angleBetweenTargetAndHeading;
+    	
+    	
+    	
+/* **************************NEW CODE*********************************************/ 
+    	// Finds the target heading in relation to the current point. 
+    	double targetHeading = Math.toDegrees(Math.atan2( targetX - currentX, targetY - currentY));
+    	if(targetX - currentX < 0) targetHeading += 360;
+    	
+    	// Finds the amount the heading needs to be adjusted.
+    	double adjustAngle = targetHeading - currentHeading; 	// CW is +, CCW is -   	
+    	if(adjustAngle < 0 ) adjustAngle = 360 + adjustAngle;	// converts any CCW angle to its CW angle
+    	
+    	return adjustAngle;
     }
 
     /**
@@ -134,8 +205,25 @@ public class TurtleSoup {
         // draw the window
         //turtle.draw();
         
-        double result = Math.toDegrees(Math.atan2(1,1));
-        System.out.println(result);
+//        //testing calculateHeadingToPoint
+//        for(int i = 0; i < 360; i += 10) {
+//        	double result = calculateHeadingToPoint(0, 0, 0, -1, -1);
+//        	System.out.println("angleToPoint[" + i + "] = " + result);
+//	        if(result != 0 && result - result != 0) {
+//	        	System.out.println("ERROR");
+//	        	break;
+//	        }
+//        }
+        System.out.println("+X = " + calculateHeadingToPoint(0, 0, 0, 1, 0));	//+X axis
+        System.out.println("Q1 = " + calculateHeadingToPoint(0, 0, 0, 1, 1));	//Quadrant I
+        System.out.println("+Y = " + calculateHeadingToPoint(0, 0, 0, 0, 1));	//+Y axis
+        System.out.println("Q2 = " + calculateHeadingToPoint(15, 0, 0, -1, 1));	//Quadrant II
+        System.out.println("-X = " + calculateHeadingToPoint(0, 0, 0, -1, 0));	//-X axis
+        System.out.println("Q3 = " + calculateHeadingToPoint(0, 0, 0, -1, -1));	//Quadrant III
+        System.out.println("-Y = " + calculateHeadingToPoint(0, 0, 0, 0, -1));	//-Y axis
+        System.out.println("Q4 = " + calculateHeadingToPoint(0, 0, 0, 1, -1));	//Quadrant IV
+        System.out.println("(1.0, 4, 5, 4, 6) = " + calculateHeadingToPoint(1.0, 4, 5, 4, 6));
+        System.out.println("FINISHED");
     }
 
 }
