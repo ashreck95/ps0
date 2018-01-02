@@ -115,7 +115,15 @@ public class TurtleSoup {
      *         otherwise of size (# of points) - 1
      */
     public static List<Double> calculateHeadings(List<Integer> xCoords, List<Integer> yCoords) {
-        throw new RuntimeException("implement me!");
+        double currentHeading = 0.0;
+        List<Double> resultingHeadings = new ArrayList<>();
+    	for( int i = 0; i < xCoords.size() - 1; i++) {
+    		currentHeading = calculateHeadingToPoint( currentHeading, xCoords.get(i), yCoords.get(i),
+    				xCoords.get(i+1), yCoords.get(i+1));
+    		resultingHeadings.add(currentHeading);
+    	}
+    	
+    	return resultingHeadings;
     }
 
     /**
