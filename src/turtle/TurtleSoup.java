@@ -61,7 +61,7 @@ public class TurtleSoup {
      */
     public static void drawRegularPolygon(Turtle turtle, int sides, int sideLength) {
     	double angle = calculateRegularPolygonAngle(sides);
-    	for(int i = 0; i < sides; i--) {
+    	for(int i = 0; i < sides; i++) {
 	    	turtle.forward(sideLength);
 	    	turtle.turn(angle);
     	}
@@ -140,30 +140,11 @@ public class TurtleSoup {
     public static void main(String args[]) {
         DrawableTurtle turtle = new DrawableTurtle();
 
-        //drawSquare(turtle, 40);
+        drawSquare(turtle, 90);
         //drawRegularPolygon(turtle, 4, 40);
-        // draw the window
-        //turtle.draw();
+        //draw the window
+        turtle.draw();
         
-//        //testing calculateHeadingToPoint
-//        for(int i = 0; i < 360; i += 10) {
-//        	double result = calculateHeadingToPoint(0, 0, 0, -1, -1);
-//        	System.out.println("angleToPoint[" + i + "] = " + result);
-//	        if(result != 0 && result - result != 0) {
-//	        	System.out.println("ERROR");
-//	        	break;
-//	        }
-//        }
-        System.out.println("+X = " + calculateHeadingToPoint(0, 0, 0, 1, 0));	//+X axis
-        System.out.println("Q1 = " + calculateHeadingToPoint(0, 0, 0, 1, 1));	//Quadrant I
-        System.out.println("+Y = " + calculateHeadingToPoint(0, 0, 0, 0, 1));	//+Y axis
-        System.out.println("Q2 = " + calculateHeadingToPoint(15, 0, 0, -1, 1));	//Quadrant II
-        System.out.println("-X = " + calculateHeadingToPoint(0, 0, 0, -1, 0));	//-X axis
-        System.out.println("Q3 = " + calculateHeadingToPoint(0, 0, 0, -1, -1));	//Quadrant III
-        System.out.println("-Y = " + calculateHeadingToPoint(0, 0, 0, 0, -1));	//-Y axis
-        System.out.println("Q4 = " + calculateHeadingToPoint(0, 0, 0, 1, -1));	//Quadrant IV
-        System.out.println("(1.0, 4, 5, 4, 6) = " + calculateHeadingToPoint(1.0, 4, 5, 4, 6));
-        System.out.println("FINISHED");
     }
 
 }
